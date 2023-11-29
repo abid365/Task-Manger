@@ -8,6 +8,7 @@ const AddTodo = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -18,6 +19,7 @@ const AddTodo = () => {
       .then((res) => {
         if (res.status) {
           toast.success(`Task has been added`);
+          reset();
         }
       })
       .catch((err) => toast.error(err));
