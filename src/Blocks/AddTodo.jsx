@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { baseUrl } from "../Api/api";
+import axios from "axios";
 
 const AddTodo = () => {
   // react hookform
@@ -8,7 +10,12 @@ const AddTodo = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  // const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) =>
+    axios
+      .post(`${baseUrl}/pending`, data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err.message));
 
   return (
     <>
@@ -31,10 +38,15 @@ const AddTodo = () => {
                 Add Todo Title
               </label>
               <input
-                className="px-2 py-2 border border-[#e2e2e2] appearance-none text-slate-400"
+                className="px-2 py-2 border border-[#e2e2e2] appearance-none"
                 type="text"
-                {...register("title")}
+                {...register("title", { required: true })}
               />
+              {errors.title?.type === "required" && (
+                <p className="text-xs py-2 text-red-400" role="alert">
+                  Title is Required*
+                </p>
+              )}
             </div>
 
             {/* left col options */}
@@ -48,7 +60,7 @@ const AddTodo = () => {
                 Status
               </label>
               <select
-                className="appearance-none px-2 py-2 bg-[#111110] rounded-md text-center font-poppins400 font-bold text-white text-sm w-fit"
+                className="px-2 py-2 bg-[#111110] rounded-md text-center font-poppins400 font-bold text-white text-sm w-fit"
                 {...register("stat", { required: true })}
                 defaultValue={"pending"}
               >
@@ -56,6 +68,11 @@ const AddTodo = () => {
                 <option value="finished">Finished</option>
                 <option value="cancelled">Cancelled</option>
               </select>
+              {errors.stat?.type === "required" && (
+                <p className="text-xs text-red-400" role="alert">
+                  Required*
+                </p>
+              )}
             </div>
             {/* mark as important? */}
           </div>
@@ -72,9 +89,14 @@ const AddTodo = () => {
               type="text"
               rows={4}
               cols={50}
-              {...register("desc")}
+              {...register("desc", { required: true })}
             />
           </div>
+          {errors.desc?.type === "required" && (
+            <p role="alert" className="py-2 text-xs text-red-400">
+              This is Required*
+            </p>
+          )}
           <div className="mt-3">
             <input
               type="checkbox"
