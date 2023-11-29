@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { baseUrl } from "../Api/api";
 import axios from "axios";
+import { Toaster, toast } from "sonner";
 
 const AddTodo = () => {
   // react hookform
@@ -14,11 +15,16 @@ const AddTodo = () => {
   const onSubmit = (data) =>
     axios
       .post(`${baseUrl}/pending`, data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err.message));
+      .then((res) => {
+        if (res.status) {
+          toast.success(`Task has been added`);
+        }
+      })
+      .catch((err) => toast.error(err));
 
   return (
     <>
+      <Toaster position="top-center" />
       <div className="bg-[#101211] py-10">
         <h1 className="text-xl font-bold text-center font-poppins500 text-white">
           Add your task
@@ -111,7 +117,7 @@ const AddTodo = () => {
           </div>
           <div className="flex justify-center items-center pt-10">
             <button
-              className="px-7 py-2 rounded-md font-semibold text-sm font-poppins400 bg-[#111110] text-white"
+              className="px-7 py-2 rounded-md font-semibold text-sm font-poppins400 bg-[#111110] text-white transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
               type="submit"
             >
               Add todo
